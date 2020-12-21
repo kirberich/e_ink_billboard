@@ -1,14 +1,15 @@
 from PIL import Image, ImageOps
+import threading
 
 try:
     from inky.inky_uc8159 import Inky
 except Exception:
 
     class Inky:
-        def set_image(*args, **kwargs):
+        def set_image(self, *args, **kwargs):
             print("set!")
 
-        def show(self):
+        def show(self, *args, **kwargs):
             print("show!")
 
 
@@ -30,8 +31,13 @@ class Display:
         background.paste(copied, (int((600 - size[0]) / 2), int((448 - size[1]) / 2)))
         return background
 
-    def show_latest(self):
+    def _show_latest(self):
         latest_image = self.resize_for_screen(Image.open("latest"))
 
         self.inky.set_image(latest_image, saturation=self.saturation)
         self.inky.show(busy_wait=False)
+        print("done")
+
+    def show_latest(self):
+        task = threading.Thread(target=self._show_latest, args=())
+        task.start()
