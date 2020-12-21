@@ -1,4 +1,4 @@
-from PIL import Image
+from PIL import Image, ImageOps
 
 try:
     from inky.inky_uc8159 import Inky
@@ -19,6 +19,10 @@ class Display:
 
     def resize_for_screen(self, image):
         copied = image.copy()
+
+        # Apply rotation in exif data
+        copied = ImageOps.exif_transpose(image)
+
         copied.thumbnail([600, 448])
         size = copied.size
         print(size)
