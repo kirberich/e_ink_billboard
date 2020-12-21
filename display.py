@@ -30,4 +30,4 @@ class Display:
         latest_image = self.resize_for_screen(Image.open("latest"))
 
         self.inky.set_image(latest_image, saturation=self.saturation)
-        self.inky.show()
+        self.inky.show(busy_wait=False)
